@@ -5,12 +5,11 @@ predefined_trans = {
     'तर': 'tara'
 }
 
-KARS = ['ा', 'ि', 'ी', 'ु', 'ू', 'े', 'ै', 'ो', 'ौ', 'ँ', 'ं', '्', 'ृ', 'ः']
+KARS = ['ा', 'ि', 'ी', 'ु', 'ू', 'े', 'ै', 'ो', 'ौ',  'ं', '्', 'ृ', 'ः']
 CONSONANTS = ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब',
               'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह', 'क्ष', 'त्र', 'ज्ञ']
 # बिभाक्ति
 SUFFIXES = ['ले', 'बाट', 'लाई', 'द्वारा', 'देखि', 'को', 'का', 'की', 'मा', 'हरु', 'संग', 'पनि']
-
 
 def replace_char(char):
     char = char.replace(r'क', "ka")
@@ -61,19 +60,17 @@ def replace_char(char):
     char = char.replace(r'अ', "a")
     char = char.replace(r'आ', "aa")
     char = char.replace(r'इ', "i")
-    char = char.replace(r'ई', "ee")
+    char = char.replace(r'ई', "i")
     char = char.replace(r'उ', "u")
     char = char.replace(r'ऊ', "oo")
     char = char.replace(r'ए', "e")
     char = char.replace(r'ऐ', "ai")
     char = char.replace(r'ओ', "o")
     char = char.replace(r'औ', "au")
-    char = char.replace(r'ँ', "an")
+    char = char.replace(r'ँ', "n")
     char = char.replace(r'ं', "an")
     char = char.replace(r'ः', "ah")
     char = char.replace(r'्', "")
-    char = char.replace(r'।', ".")
-    char = char.replace(r' ।', ".")
     char = char.replace(r'ृ', "ri")
     char = char.replace(r'ॄ', "r")
     char = char.replace(r'ॠ', "ri")
@@ -81,6 +78,7 @@ def replace_char(char):
     char = char.replace(r'ॢ', "l")
     char = char.replace(r'ॐ', "om")
     return char
+
 
 def conv_word(word):
     # print(word)
@@ -99,8 +97,8 @@ def conv_word(word):
             if idx < length - 1:
                 if word[idx + 1] in KARS and tr[-1:] == 'a':
                     tr = tr[:-1]
-            # remove trailing 'a' from consonant if last character but only if not previous character is half
-            elif idx == length - 1 and not word[idx - 1] == '्':
+            # remove trailing 'a' from consonant if last character but only if not previous character is half and isn't the only character
+            elif idx == length - 1 and not word[idx - 1] == '्' and len(word)>1:
                 if tr[-1:] == 'a':
                     tr = tr[:-1]
         new += tr
@@ -109,6 +107,7 @@ def conv_word(word):
         new += conv_word(suffix)
     return new
 
+
 def handle_matches(match):
     word = match.group()
     if word in predefined_trans.keys():
@@ -116,16 +115,20 @@ def handle_matches(match):
     else:
         return conv_word(match.group())
 
+
 def conv(str):
-    new_str = re.sub(r'[^\s,!\?\[\]\(\)।]+', handle_matches, str)
+    pattern = r'[^\s,!\?\[\]\(\)।]+'
+    new_str = re.sub(pattern, handle_matches, str)
+    new_str = new_str.replace(r' ।', ".")
+    new_str = new_str.replace(r'।', ".")
     print(new_str)
 
 
-# conv('जीवन हुरीको गीत हो भने जसरि पनि गाउनै पर्छ सुखी मिलेन भने हामी दुखि दुखि नै मिल्नुपर्छ')
-# conv('मेरा घरहरु गिर्छन्')
-# conv('तर मायाले')
-# conv('''ति 
-# तर मायाले''')
+conv('जीवन हुरीको गीत हो भने जसरि पनि गाउनै पर्छ सुखी मिलेन भने हामी दुखि दुखि नै मिल्नुपर्छ')
+conv('मेरा घरहरु गिर्छन्')
+conv('तर मायाले')
+conv('''ति 
+तर मायाले''')
 conv('''[ऋतुहरुमा तिमी, हरियाली बसन्त हौ।
 नदीहरुमा तिमी हो, पबित्र गंगा हौ।]…२
 
@@ -144,5 +147,8 @@ conv('''[ऋतुहरुमा तिमी, हरियाली बसन�
 फूलहरुमा तिमी, कोमल गुलाव हौ।
 नदीहरुमा तिमी हो, पबित्र गंगा हौ।
 ऋतुहरुमा तिमी, हरियाली बसन्त हौ।
-नदीहरुमा तिमी हो, पबित्र गंगा हौ।''')
+नदीहरुमा तिमी हो, पबित्र गंगा हौ चाँद ।
+अनुभव
+
+''')
 #
