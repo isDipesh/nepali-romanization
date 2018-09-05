@@ -1,3 +1,5 @@
+import re
+
 predefined_trans = {
     'गीत': 'geet',
     'तर': 'tara'
@@ -80,7 +82,6 @@ def replace_char(char):
     char = char.replace(r'ॐ', "om")
     return char
 
-
 def conv_word(word):
     # print(word)
     new = ''
@@ -108,27 +109,17 @@ def conv_word(word):
         new += conv_word(suffix)
     return new
 
+def handle_matches(match):
+    word = match.group()
+    if word in predefined_trans.keys():
+        return predefined_trans[word]
+    else:
+        return conv_word(match.group())
 
 def conv(str):
-    str = str.replace('\n', ' \n')
-    new_words = []
-    for word in str.split(' '):
-        # handle new line for predefined words
-        first_word = word.startswith('\n')
-        last_word = word.endswith('\n') and len(word) > 1
-        word = word.strip('\n')
-        if word in predefined_trans.keys():
-            new_word = predefined_trans[word]
-        else:
-            new_word = conv_word(word)
-        if first_word:
-            new_word = '\n' + new_word
-        if last_word:
-            new_word += '\n'
-        new_words.append(new_word)
-    new_str = ' '.join(new_words)
-    new_str = new_str.replace(' \n', '\n')
+    new_str = re.sub(r'[^\s,!\?\[\]\(\)।]+', handle_matches, str)
     print(new_str)
+
 
 # conv('जीवन हुरीको गीत हो भने जसरि पनि गाउनै पर्छ सुखी मिलेन भने हामी दुखि दुखि नै मिल्नुपर्छ')
 # conv('मेरा घरहरु गिर्छन्')
@@ -142,7 +133,7 @@ conv('''[ऋतुहरुमा तिमी, हरियाली बसन�
 तर मायाले भरिएका छन औलाहरु।]…२
 
 पवित्र छन तिम्रा, लाजका गहना। …२
-तर चाहनाले भिजेका छन, ओठहरु।
+तर चाहनाले भिजेका छन। ओठहरु।
 
 हावाहरुमा तिमी, शितल पवन हौ।
 नदीहरुमा तिमी हो, पबित्र गंगा हौ।
@@ -154,4 +145,4 @@ conv('''[ऋतुहरुमा तिमी, हरियाली बसन�
 नदीहरुमा तिमी हो, पबित्र गंगा हौ।
 ऋतुहरुमा तिमी, हरियाली बसन्त हौ।
 नदीहरुमा तिमी हो, पबित्र गंगा हौ।''')
-# 
+#
