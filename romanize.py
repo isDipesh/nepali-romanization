@@ -83,12 +83,12 @@ def replace_char(char):
 def conv_word(word):
     # print(word)
     new = ''
-    suffix = None
+    suffixes = []
     for suff in SUFFIXES:
         # if the word ends in suffix but isn't suffix itself
         if word.endswith(suff) and len(suff) != len(word):
-            suffix = suff
             word = word[:len(suff) * -1]
+            suffixes.insert(0, suff)
     length = len(word)
     for idx, char in enumerate(word):
         tr = replace_char(char)
@@ -102,6 +102,8 @@ def conv_word(word):
                 if tr[-1:] == 'a':
                     tr = tr[:-1]
         new += tr
+    print(new)
+    suffix = ''.join(suffixes)
     if suffix:
         new += conv_word(suffix)
     return new
@@ -121,4 +123,26 @@ def conv(str):
 
 # conv('जीवन हुरीको गीत हो भने जसरि पनि गाउनै पर्छ सुखी मिलेन भने हामी दुखि दुखि नै मिल्नुपर्छ')
 # conv('मेरा घरहरु गिर्छन्')
-print(conv_word('घरहरु'))
+# conv('घरहरुमा')
+conv('''[ऋतुहरुमा तिमी, हरियाली बसन्त हौ।
+नदीहरुमा तिमी हो, पबित्र गंगा हौ।]…२
+
+[निर्दोष छन ति तिम्रा, हत्केलाहरू।
+तर मायाले भरिएका छन औलाहरु।]…२
+पवित्र छन तिम्रा, लाजका गहना। …२
+तर चाहनाले भिजेका छन, ओठहरु।
+
+हावाहरुमा तिमी, शितल पवन हौ।
+नदीहरुमा तिमी हो, पबित्र गंगा हौ।
+
+[प्रकृतिले मलाई जन्म दिएकी,
+तिम्रो सिउदो मा सिन्दुर भर्न।]…२
+सरस्वतीले कलम थमाए कि।…२
+तिम्रो सुन्दरताको सधैँ, बयान गर्न।
+
+फूलहरुमा तिमी, कोमल गुलाव हौ।
+नदीहरुमा तिमी हो, पबित्र गंगा हौ।
+
+ऋतुहरुमा तिमी, हरियाली बसन्त हौ।
+नदीहरुमा तिमी हो, पबित्र गंगा हौ।''')
+ 
