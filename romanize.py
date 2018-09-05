@@ -6,7 +6,8 @@ KARS = ['ा', 'ि', 'ी', 'ु', 'ू', 'े', 'ै', 'ो', 'ौ', 'ँ', '�
 CONSONANTS = ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब',
               'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह', 'क्ष', 'त्र', 'ज्ञ']
 # बिभाक्ति
-SUFFIXES = ['ले', 'बाट', 'लाई', 'द्वारा', 'देखि', 'को', 'का', 'की', 'मा', 'हरु', 'संग','पनि']
+SUFFIXES = ['ले', 'बाट', 'लाई', 'द्वारा', 'देखि', 'को', 'का', 'की', 'मा', 'हरु', 'संग', 'पनि']
+
 
 def replace_char(char):
     char = char.replace(r'क', "ka")
@@ -82,11 +83,12 @@ def replace_char(char):
 def conv_word(word):
     # print(word)
     new = ''
-    for suffix in SUFFIXES:
-        if word.endswith(suffix):
-            word = word.rstrip(suffix)
-            print(suffix)
-            print(word)
+    suffix = None
+    for suff in SUFFIXES:
+        # if the word ends in suffix but isn't suffix itself
+        if word.endswith(suff) and len(suff) != len(word):
+            suffix = suff
+            word = word[:len(suff) * -1]
     length = len(word)
     for idx, char in enumerate(word):
         tr = replace_char(char)
@@ -100,6 +102,8 @@ def conv_word(word):
                 if tr[-1:] == 'a':
                     tr = tr[:-1]
         new += tr
+    if suffix:
+        new += conv_word(suffix)
     return new
 
 
