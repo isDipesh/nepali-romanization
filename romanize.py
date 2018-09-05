@@ -7,7 +7,8 @@ predefined_trans = {
     'तँ': 'ta',
     'संयोजक': 'samyojak',
     ' प्रशंसा': 'prasamsha',
-    'संलग्न': 'samlagna'    
+    'संलग्न': 'samlagna',
+    'वर्ष': 'barsha',
 }
 
 KARS = ['ा', 'ि', 'ी', 'ु', 'ू', 'े', 'ै', 'ो', 'ौ', 'ं', '्', 'ृ', 'ः']
@@ -121,8 +122,8 @@ def conv_word(word):
             elif idx == length - 1 and len(word) > 1:
                 if not pronouce_inherent(word, char, idx):
                     if tr[-1:] == 'a':
-                        # if char == 'व':
-                        #     tr = 'va'
+                        if char == 'व':
+                            tr = 'va'
                         tr = tr[:-1]
         new += tr
     suffix = ''.join(suffixes)
