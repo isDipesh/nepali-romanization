@@ -97,6 +97,8 @@ def conv_word(word):
             if idx < length - 1:
                 if word[idx + 1] in KARS and tr[-1:] == 'a':
                     tr = tr[:-1]
+            elif idx == length - 1 and char=='व':
+                tr = 'v'
             # remove trailing 'a' from consonant if last character but only if not previous character is half and isn't the only character
             elif idx == length - 1 and not word[idx - 1] == '्' and len(word)>1:
                 if tr[-1:] == 'a':
