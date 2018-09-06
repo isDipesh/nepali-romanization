@@ -100,6 +100,7 @@ def pronouce_inherent(word, char, idx):
     # 5. Consonant after vowel, e.g. आज
     if prev in VOWELS:
         return True
+    # TODO Handle other cases
     return False
 
 
@@ -120,11 +121,10 @@ def romanize_word(word):
             # Bindus after vowels and kars don't give 'a' sound
             if char in BINDUS and idx > 0 and (word[idx - 1] in KARS or word[idx - 1] in VOWELS):
                 if idx == length - 1:
-                    # Don't do anything for bindus at last like गरें => gare 
+                    # Don't do anything for bindus at last like गरें => gare but not garen
                     tr = ''
                 else:
-
-                    ## Don't write a
+                    ## Don't write 'a'
                     tr = tr[1:]
             if char in CONSONANTS:
                 # if the consonant is followed by kaars (a-kaars, u-kaars, etc.), remove trailing 'a'
@@ -189,13 +189,12 @@ def capitalize(str):
     return str
 
 
-def romanize_devanagari(str):
+def romanize_text(str):
     pattern = r'[^\s,!\?\[\]\(\)।]+'
-    # Handle ज्ञ
+    # Handle ज्ञ - https://twitter.com/xtranophilist/status/1037741654415831040
     str = str.replace('ज्ञ', 'ग्य')
     romanized_str = re.sub(pattern, handle_matches, str)
     # Replace purna birams with full-stops
     romanized_str = romanized_str.replace(r' ।', '.').replace(r'।', '.')
     capitalized = capitalize(romanized_str)
-    print(capitalized)
     return capitalized
