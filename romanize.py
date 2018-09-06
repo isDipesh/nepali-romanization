@@ -96,13 +96,13 @@ def replace_char(char):
 
 
 def pronouce_inherent(word, char, idx):
-    pronouce = True
+    prev = word[idx - 1]
     # Scenarios when inherent vowel is pronounced
     # 1. छ, य, ह
     if char in ['छ', 'य', 'ह']:
         return True
-    # 2. Followed by a dead consonant
-    if word[idx - 1] == '्':
+    # 2. Followed by a dead consonant, or bindus
+    if prev == '्' or prev in BINDUS:
         return True
     return False
 
