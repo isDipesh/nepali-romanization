@@ -181,15 +181,11 @@ def find_punctuations(str):
     return positions
 
 
-def conv(str):
-    pattern = r'[^\s,!\?\[\]\(\)।]+'
-    romanized_str = re.sub(pattern, handle_matches, str)
-    romanized_str = romanized_str.replace(r' ।', ".")
-    romanized_str = romanized_str.replace(r'।', ".")
-    punctuation_indices = find_punctuations(romanized_str)
-    lst = list(romanized_str)
+def capitalize(str):
+    punctuation_indices = find_punctuations(str)
+    lst = list(str)
     lst[0] = lst[0].upper()
-    length = len(romanized_str)
+    length = len(str)
     for idx in punctuation_indices:
         offset = 1
         if idx < length - 1:
@@ -200,8 +196,16 @@ def conv(str):
             if first_letter in ['\n', '\t', '\r']:
                 continue
             lst[idx + offset] = first_letter.upper()
-    romanized_str = ''.join(lst)
-    print(romanized_str)
+    str = ''.join(lst)
+    return str
+
+
+def conv(str):
+    pattern = r'[^\s,!\?\[\]\(\)।]+'
+    romanized_str = re.sub(pattern, handle_matches, str)
+    romanized_str = romanized_str.replace(r' ।', ".")
+    romanized_str = romanized_str.replace(r'।', ".")
+    print(capitalize(romanized_str))
 
 
 conv('''मर्न बरु गाह्रो हुन्न-२, तिम्रो माया मार्नै सकिंन -२
