@@ -202,15 +202,17 @@ def capitalize(str):
     return str
 
 
-def conv(str):
+def romanize_devanagari(str):
     pattern = r'[^\s,!\?\[\]\(\)।]+'
     romanized_str = re.sub(pattern, handle_matches, str)
-    romanized_str = romanized_str.replace(r' ।', '.')
-    romanized_str = romanized_str.replace(r'।', '.')
-    print(capitalize(romanized_str))
+    # Replace purna birams with full-stops
+    romanized_str = romanized_str.replace(r' ।', '.').replace(r'।', '.')
+    capitalized = capitalize(romanized_str)
+    print(capitalized)
+    return capitalized
 
 
-conv('''मर्न बरु गाह्रो हुन्न-२, तिम्रो माया मार्नै सकिंन -२
+romanize_devanagari('''मर्न बरु गाह्रो हुन्न-२, तिम्रो माया मार्नै सकिंन -२
 मर्न बरु गाह्रो हुन्न-२, तिम्रो माया मार्नै सकिंन -२
 
 बसन्त को हरियाली फूल संगै ओइली जान्छ-२
