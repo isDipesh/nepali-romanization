@@ -46,6 +46,7 @@ HARD_CODED = {
     'नाम': 'naam',
     'छैन': 'chhaina',
     'दिन': 'din',
+    'तल': 'tala',
 }
 
 PREDEFINED = LOAN_WORDS.copy()
@@ -108,32 +109,35 @@ def romanize_word(word):
         if word.endswith(suff) and len(suff) != len(word):
             word = word[:len(suff) * -1]
             suffixes.insert(0, suff)
-    length = len(word)
-    for idx, char in enumerate(word):
-        tr = replace_char(char)
-        # Bindus after vowels and kars don't give 'a' sound
-        if char in BINDUS and idx > 0 and (word[idx - 1] in KARS or word[idx - 1] in VOWELS):
-            if idx == length - 1:
-                # Don't do anything for bindus at last like गरें => gare 
-                tr = ''
-            else:
-                ## Don't write a
-                tr = tr[1:]
-        if char in CONSONANTS:
-            # if the consonant is followed by kaars (a-kaars, u-kaars, etc.), remove trailing 'a'
-            if idx < length - 1:
-                if word[idx + 1] in KARS and tr[-1:] == 'a':
-                    tr = tr[:-1]
-            elif idx == length - 1 and char == 'ङ':
-                tr = 'ng'
-            # remove trailing 'a' from consonant if last character but only if it isn't the only character
-            elif idx == length - 1 and len(word) > 1:
-                if not pronouce_inherent(word, char, idx):
-                    if tr[-1:] == 'a':
-                        if char == 'व':
-                            tr = 'va'
+    if word in PREDEFINED.keys():
+        new = PREDEFINED[word]
+    else:
+        length = len(word)
+        for idx, char in enumerate(word):
+            tr = replace_char(char)
+            # Bindus after vowels and kars don't give 'a' sound
+            if char in BINDUS and idx > 0 and (word[idx - 1] in KARS or word[idx - 1] in VOWELS):
+                if idx == length - 1:
+                    # Don't do anything for bindus at last like गरें => gare 
+                    tr = ''
+                else:
+                    ## Don't write a
+                    tr = tr[1:]
+            if char in CONSONANTS:
+                # if the consonant is followed by kaars (a-kaars, u-kaars, etc.), remove trailing 'a'
+                if idx < length - 1:
+                    if word[idx + 1] in KARS and tr[-1:] == 'a':
                         tr = tr[:-1]
-        new += tr
+                elif idx == length - 1 and char == 'ङ':
+                    tr = 'ng'
+                # remove trailing 'a' from consonant if last character but only if it isn't the only character
+                elif idx == length - 1 and len(word) > 1:
+                    if not pronouce_inherent(word, char, idx):
+                        if tr[-1:] == 'a':
+                            if char == 'व':
+                                tr = 'va'
+                            tr = tr[:-1]
+            new += tr
     suffix = ''.join(suffixes)
     if suffix:
         new += romanize_word(suffix)
@@ -141,12 +145,7 @@ def romanize_word(word):
 
 
 def handle_matches(match):
-    word = match.group()
-    if word in PREDEFINED.keys():
-        return PREDEFINED[word]
-    else:
-        return romanize_word(match.group())
-
+    return romanize_word(match.group())
 
 # https://www.daniweb.com/programming/software-development/threads/399829/sentence-capitalization-in-python#post1713277
 def find_punctuations(str):
@@ -196,3 +195,12 @@ def romanize_devanagari(str):
     capitalized = capitalize(romanized_str)
     print(capitalized)
     return capitalized
+
+
+romanize_devanagari('''
+वेबको कुनैपनि ठाँउमा, तपाईंले छनोट गर्नु भएको भाषामा टाइप गर्न Google आगत उपकरणहरूले सजिलो बनाउँछ। थप जान्नुहोस्
+
+यसलाई प्रयास गर्न, तपाईंको भाषा र तलको आगत उपकरण रोज्नुहोस् र टाइप गर्न सुरु गर्नुहोस्।
+
+
+''')
