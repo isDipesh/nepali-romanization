@@ -122,6 +122,13 @@ def conv_word(word):
     length = len(word)
     for idx, char in enumerate(word):
         tr = replace_char(char)
+        if char in BINDUS and idx > 0 and word[idx - 1] in KARS:
+            if idx == length - 1:
+                # Don't do anything for bindus at last like गरें => gare 
+                tr = ''
+            else:
+                ## Don't write a
+                tr = tr[1:]
         if char in CONSONANTS:
             # if the consonant is followed by kaars (a-kaars, u-kaars, etc.), remove trailing 'a'
             if idx < length - 1:
