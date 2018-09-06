@@ -26,71 +26,73 @@ SUFFIXES = ['ले', 'बाट', 'लाई', 'द्वारा', 'देख
 
 
 def replace_char(char):
-    char = char.replace(r'क', "ka")
-    char = char.replace(r'ख', "kha")
-    char = char.replace(r'ग', "ga")
-    char = char.replace(r'घ', "gha")
-    char = char.replace(r'ङ', "na")
-    char = char.replace(r'च', "cha")
-    char = char.replace(r'छ', "chha")
-    char = char.replace(r'ज', "ja")
-    char = char.replace(r'झ', "jha")
-    char = char.replace(r'ञ', "na")
-    char = char.replace(r'ट', "ta")
-    char = char.replace(r'ठ', "tha")
-    char = char.replace(r'ड', "da")
-    char = char.replace(r'ढ', "dha")
-    char = char.replace(r'ण', "na")
-    char = char.replace(r'त', "ta")
-    char = char.replace(r'थ', "tha")
-    char = char.replace(r'द', "da")
-    char = char.replace(r'ध', "dha")
-    char = char.replace(r'न', "na")
-    char = char.replace(r'प', "pa")
-    char = char.replace(r'फ', "pha")
-    char = char.replace(r'ब', "ba")
-    char = char.replace(r'भ', "bha")
-    char = char.replace(r'म', "ma")
-    char = char.replace(r'य', "ya")
-    char = char.replace(r'र', "ra")
-    char = char.replace(r'ल', "la")
-    char = char.replace(r'व', "wa")
-    char = char.replace(r'श', "sha")
-    char = char.replace(r'ष', "sha")
-    char = char.replace(r'स', "sa")
-    char = char.replace(r'ह', "ha")
-    char = char.replace(r'ऋ', "ri")
-    char = char.replace(r'ा', "a")
-    char = char.replace(r'ि', "i")
-    char = char.replace(r'ी', "i")
-    char = char.replace(r'ु', "u")
-    char = char.replace(r'ू', "u")
-    char = char.replace(r'े', "e")
-    char = char.replace(r'ै', "ai")
-    char = char.replace(r'ॊ', "o")
-    char = char.replace(r'ो', "o")
-    char = char.replace(r'ौ', "au")
-    char = char.replace(r'अ', "a")
-    char = char.replace(r'आ', "aa")
-    char = char.replace(r'इ', "i")
-    char = char.replace(r'ई', "i")
-    char = char.replace(r'उ', "u")
-    char = char.replace(r'ऊ', "oo")
-    char = char.replace(r'ए', "e")
-    char = char.replace(r'ऐ', "ai")
-    char = char.replace(r'ओ', "o")
-    char = char.replace(r'औ', "au")
-    char = char.replace(r'ँ', "an")
-    char = char.replace(r'ं', "an")
-    char = char.replace(r'ः', "ah")
-    char = char.replace(r'्', "")
-    char = char.replace(r'ृ', "ri")
-    char = char.replace(r'ॄ', "r")
-    char = char.replace(r'ॠ', "ri")
-    char = char.replace(r'ॣ', "l")
-    char = char.replace(r'ॢ', "l")
-    char = char.replace(r'ॐ', "om")
-    return char
+    rep_dct = {
+        'क': 'ka',
+        'ख': 'kha',
+        'ग': 'ga',
+        'घ': 'gha',
+        'ङ': 'na',
+        'च': 'cha',
+        'छ': 'chha',
+        'ज': 'ja',
+        'झ': 'jha',
+        'ञ': 'na',
+        'ट': 'ta',
+        'ठ': 'tha',
+        'ड': 'da',
+        'ढ': 'dha',
+        'ण': 'na',
+        'त': 'ta',
+        'थ': 'tha',
+        'द': 'da',
+        'ध': 'dha',
+        'न': 'na',
+        'प': 'pa',
+        'फ': 'pha',
+        'ब': 'ba',
+        'भ': 'bha',
+        'म': 'ma',
+        'य': 'ya',
+        'र': 'ra',
+        'ल': 'la',
+        'व': 'wa',
+        'श': 'sha',
+        'ष': 'sha',
+        'स': 'sa',
+        'ह': 'ha',
+        'ऋ': 'ri',
+        'ा': 'a',
+        'ि': 'i',
+        'ी': 'i',
+        'ु': 'u',
+        'ू': 'u',
+        'े': 'e',
+        'ै': 'ai',
+        'ॊ': 'o',
+        'ो': 'o',
+        'ौ': 'au',
+        'अ': 'a',
+        'आ': 'aa',
+        'इ': 'i',
+        'ई': 'i',
+        'उ': 'u',
+        'ऊ': 'oo',
+        'ए': 'e',
+        'ऐ': 'ai',
+        'ओ': 'o',
+        'औ': 'au',
+        'ँ': 'an',
+        'ं': 'an',
+        'ः': 'ah',
+        '्': '',
+        'ृ': 'ri',
+        'ॄ': 'r',
+        'ॠ': 'ri',
+        'ॣ': 'l',
+        'ॢ': 'l',
+        'ॐ': 'om'
+    }
+    return rep_dct[char] if char in rep_dct else char
 
 
 def pronouce_inherent(word, char, idx):
@@ -203,8 +205,8 @@ def capitalize(str):
 def conv(str):
     pattern = r'[^\s,!\?\[\]\(\)।]+'
     romanized_str = re.sub(pattern, handle_matches, str)
-    romanized_str = romanized_str.replace(r' ।', ".")
-    romanized_str = romanized_str.replace(r'।', ".")
+    romanized_str = romanized_str.replace(r' ।', '.')
+    romanized_str = romanized_str.replace(r'।', '.')
     print(capitalize(romanized_str))
 
 
