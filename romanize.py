@@ -187,20 +187,20 @@ def conv(str):
     romanized_str = romanized_str.replace(r' ।', ".")
     romanized_str = romanized_str.replace(r'।', ".")
     punctuation_indices = find_punctuations(romanized_str)
-    # print(romanized_str)
+    lst = list(romanized_str)
+    lst[0] = lst[0].upper()
     length = len(romanized_str)
     for idx in punctuation_indices:
         offset = 1
         if idx < length - 1:
-            first_letter = romanized_str[idx + offset]
+            first_letter = lst[idx + offset]
             if first_letter == ' ' and idx < length - (offset + 1):
                 offset = 2
-                first_letter = romanized_str[idx + offset]
+                first_letter = lst[idx + offset]
             if first_letter in ['\n', '\t', '\r']:
                 continue
-            lst = list(romanized_str)
             lst[idx + offset] = first_letter.upper()
-            romanized_str = ''.join(lst)
+    romanized_str = ''.join(lst)
     print(romanized_str)
 
 
