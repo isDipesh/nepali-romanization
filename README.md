@@ -1,6 +1,6 @@
 **Romanization of Nepali Unicode** 
 
-This is a Python script to phonemically convert Nepali text  or words in Devanagari script to Latin Script.
+This is a Python script to phonemically transcript Nepali text or words in Devanagari script to Latin Script.
 
 Usage:
 
@@ -30,7 +30,7 @@ romanize_word('मत्स्येन्द्रनाथ')
 ``` 
 
 ***Note:***
- - The script was developed to transcript Nepali text for targeting search keywords by general users. Therefore, the script tries to transcript to what a general user would type a given Nepali word in Latin script. For example, 'गरें' is converted to 'gare' while 'garen' being the phonemically correct transcription.
+ - The script was developed to transcript Nepali text for targeting search keywords by general users. Therefore, the script tries to convert to what a general user would type a given Nepali word in Latin script. For example, 'गरें' is converted to 'gare' while 'garen' being the phonemically correct transcription.
  - The transcripted script isn't always accurate, specially where it needs to decide on the pronounciation of inherent vowels. For example, 'दिन' can either be 'din', meaning 'day'; or 'dina', meaning 'to give'.     
 - Words in new line and those after punctuation characters are automatically capitalized.
 
