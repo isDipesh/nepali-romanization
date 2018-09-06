@@ -1,6 +1,38 @@
 import re
 
-predefined_trans = {
+# https://nepalgo.tumblr.com/post/53364348267/vocabulary-western-loanwords
+LOAN_WORDS = {
+    # from English
+    'रेडियो': 'radio',
+    'कोट': 'coat',
+    'डाक्टर': 'doctor',
+    'स्कुल': 'school',
+    'क्यान्सर': 'cancer',
+    'ब्याग': 'bag',
+    'टिकट': 'ticket',
+    'सिनेमा': 'cinema',
+    'फोटो': 'photo',
+    'टेलिफोन': 'telephone',
+    'फोन': 'phone',
+    'क्यामेरा': 'camera',
+    'कम्प्युटर': 'computer',
+    'मोटर': 'motor',
+    'मोबाइल': 'mobile',
+    # from Latin
+    'क्यालेन्डर': 'calendar',
+    'क्याम्पस': 'campus',
+    'स्टुडियो': 'studio',
+    # from French
+    'कलेज': 'college',
+    'पुलिस': 'police',
+    'इन्जिनियर': 'engineer',
+    'टुरिस्ट': 'tourist',
+    # from Portugese
+    'कफी': 'coffee',
+    'कर्फ्यु': 'curfew'
+}
+
+HARD_CODED = {
     'गीत': 'geet',
     'तर': 'tara',
     'मञ्च': 'manch',
@@ -9,12 +41,15 @@ predefined_trans = {
     ' प्रशंसा': 'prasamsha',
     'संलग्न': 'samlagna',
     'वर्ष': 'barsha',
-    'मोबाइल': 'mobile',
     'नम्बर': 'number',
     'न.': 'No.',
     'नाम': 'naam',
     'छैन': 'chhaina',
+    'दिन': 'din',
 }
+
+PREDEFINED = LOAN_WORDS.copy()
+PREDEFINED.update(HARD_CODED)
 
 KARS = ['ा', 'ि', 'ी', 'ु', 'ू', 'े', 'ै', 'ो', 'ौ', 'ं', '्', 'ृ', 'ः']
 CONSONANTS = ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब',
@@ -107,8 +142,8 @@ def romanize_word(word):
 
 def handle_matches(match):
     word = match.group()
-    if word in predefined_trans.keys():
-        return predefined_trans[word]
+    if word in PREDEFINED.keys():
+        return PREDEFINED[word]
     else:
         return romanize_word(match.group())
 
