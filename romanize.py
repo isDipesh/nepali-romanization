@@ -104,6 +104,9 @@ def pronouce_inherent(word, char, idx):
     # 2. Followed by a dead consonant, or bindus
     if prev == '्' or prev in BINDUS:
         return True
+    # आज
+    if prev in VOWELS:
+        return True
     return False
 
 
