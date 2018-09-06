@@ -116,8 +116,7 @@ def pronouce_inherent(word, char, idx):
     return False
 
 
-def conv_word(word):
-    # print(word)
+def romanize_word(word):
     new = ''
     suffixes = []
     for suff in SUFFIXES:
@@ -128,6 +127,7 @@ def conv_word(word):
     length = len(word)
     for idx, char in enumerate(word):
         tr = replace_char(char)
+        # Bindus after vowels and kars don't give 'a' sound
         if char in BINDUS and idx > 0 and (word[idx - 1] in KARS or word[idx - 1] in VOWELS):
             if idx == length - 1:
                 # Don't do anything for bindus at last like गरें => gare 
@@ -152,7 +152,7 @@ def conv_word(word):
         new += tr
     suffix = ''.join(suffixes)
     if suffix:
-        new += conv_word(suffix)
+        new += romanize_word(suffix)
     return new
 
 
@@ -161,7 +161,7 @@ def handle_matches(match):
     if word in predefined_trans.keys():
         return predefined_trans[word]
     else:
-        return conv_word(match.group())
+        return romanize_word(match.group())
 
 
 # https://www.daniweb.com/programming/software-development/threads/399829/sentence-capitalization-in-python#post1713277
