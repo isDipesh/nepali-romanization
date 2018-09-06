@@ -16,7 +16,6 @@ predefined_trans = {
     'छैन': 'chhaina',
 }
 
-
 KARS = ['ा', 'ि', 'ी', 'ु', 'ू', 'े', 'ै', 'ो', 'ौ', 'ं', '्', 'ृ', 'ः']
 CONSONANTS = ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब',
               'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह', 'क्ष', 'त्र', 'ज्ञ']
@@ -24,7 +23,6 @@ VOWELS = ['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ए', 'ऐ', 'ओ', 'औ', 
 BINDUS = ['ँ', 'ं', 'ः', ]
 # बिभाक्ति
 SUFFIXES = ['ले', 'बाट', 'लाई', 'द्वारा', 'देखि', 'को', 'का', 'की', 'मा', 'हरु', 'संग', 'पनि']
-
 
 
 def replace_char(char):
@@ -128,7 +126,7 @@ def conv_word(word):
     length = len(word)
     for idx, char in enumerate(word):
         tr = replace_char(char)
-        if char in BINDUS and idx > 0 and (word[idx - 1] in KARS or word[idx-1] in VOWELS):
+        if char in BINDUS and idx > 0 and (word[idx - 1] in KARS or word[idx - 1] in VOWELS):
             if idx == length - 1:
                 # Don't do anything for bindus at last like गरें => gare 
                 tr = ''
@@ -164,70 +162,59 @@ def handle_matches(match):
         return conv_word(match.group())
 
 
+# https://www.daniweb.com/programming/software-development/threads/399829/sentence-capitalization-in-python#post1713277
+def find_punctuations(str):
+    positions = list()
+    start = 0
+    while start < len(str):
+        pos = list()
+        for c in ('.', '!', '?', '\n'):
+            p = str.find(c, start)
+            if p >= start:
+                pos.append(p)
+        if pos:
+            m = min(pos)
+            positions.append(m)
+            start = m + 1
+        else:
+            break
+    return positions
+
+
 def conv(str):
     pattern = r'[^\s,!\?\[\]\(\)।]+'
-    new_str = re.sub(pattern, handle_matches, str)
-    new_str = new_str.replace(r' ।', ".")
-    new_str = new_str.replace(r'।', ".")
-    print(new_str)
+    romanized_str = re.sub(pattern, handle_matches, str)
+    romanized_str = romanized_str.replace(r' ।', ".")
+    romanized_str = romanized_str.replace(r'।', ".")
+    punctuation_indices = find_punctuations(romanized_str)
+    # print(romanized_str)
+    length = len(romanized_str)
+    for idx in punctuation_indices:
+        offset = 1
+        if idx < length - 1:
+            first_letter = romanized_str[idx + offset]
+            if first_letter == ' ' and idx < length - (offset + 1):
+                offset = 2
+                first_letter = romanized_str[idx + offset]
+            if first_letter in ['\n', '\t', '\r']:
+                continue
+            lst = list(romanized_str)
+            lst[idx + offset] = first_letter.upper()
+            romanized_str = ''.join(lst)
+    print(romanized_str)
 
 
-# 
-# conv('जीवन हुरीको गीत हो भने जसरि पनि गाउनै पर्छ सुखी मिलेन भने हामी दुखि दुखि नै मिल्नुपर्छ')
-# conv('मेरा घरहरु गिर्छन्')
-# conv('तर मायाले')
-# conv('''ति 
-# तर मायाले''')
-conv('''भेट भयो आज हामी सिन्डिकेट्को माझ हामी 
-उभिएछु तिम्रो बगल मा, बिजि तिमी मोबाइल मा हेरेछु 
-खेलेको योवन, 
+conv('''मर्न बरु गाह्रो हुन्न-२, तिम्रो माया मार्नै सकिंन -२
+मर्न बरु गाह्रो हुन्न-२, तिम्रो माया मार्नै सकिंन -२
 
-नाम तिम्रो थाहा छैन तर मलाई पर्वाहा छैन 
-बोली केही रहेछौ है, आँखाले केही भनिरहेछौ है 
-बोलु त के भनेर 
-डर पनि लाग्छ सोचेर 
+बसन्त को हरियाली फूल संगै ओइली जान्छ-२
+निलो भुइँको सेतो बादल हावा संगै उडी जान्छ
+तर तिम्रो न्यानो माया-२ अझैं पनि न्यानो नै छ
+तिम्रो माया मार्नै सकिंन -२
+मर्न बरु गाह्रो हुन्न-२, तिम्रो माया मार्नै सकिंन -२
 
-तिमी जाने सिलिगुरि, म जाने सिक्किम तिर 
-
-खुसी छु है तिम्रै माझ भुले सारा संसार आज 
-तिमी पनि म संग नै जान भए कति रमाइलो 
-हुने थियो भन्नत 
-
-कस्तो यो मिलन हाम्रो, बीस मिनेट को सम्बन्ध हाम्रो 
-पाएर पनि नपाए जस्तो, चिनेर पनि न चिने जस्तो 
-जिन्दगी यस्तै नै हो र 
-आफ्नै बाटो त जानू छदै छर 
-
-तिमी जाने सिलिगुरि, म जाने सिक्किम तिर 
-
-मलाई नै हेरेको झै लाग्छ घरी घरि 
-(हेरे लाग्छ घरिघरि) 
-फर्की हेर्छु म पनि आशा सरि 
-(हुउ... आशा सरि) 
-मनमा सोच्दै म रमाउद छु 
-(मनमा सोच्दै म रमाउद छु) 
-तिमी संगै भएको कल्पना गर्छु 
-(कल्पना गर्छु...) 
-
-कस्तो धर्के पानी पर्यो, भिजेर म चुर भए 
-तिमी संगै ओत लागि आफ्नो गाडी पर्खिरहे 
-भिजेछु आज म रहर ले 
-सबै गाडी चद्न थाल्यो कमाण्डर को हर्न सुनी 
-कलिम्पोङ टु सिलिगुरि, भन तिमी कस्तो निस्ठुरी 
-चडेर गयो कता तिर 
-छाडी राख्यौ मलाई यतै तिर 
-तिमी जाने सिलिगुरि, म जाने सिक्किम तिर 
-तिमी जाने सिलिगुरि, म जाने सिक्किम तिर 
-तिमी जाने सिलिगुरि, म जाने सिक्किम तिर 
-''')
-
-# conv('''
-# उक्त परिवर्तन पटक छत लाञ्छना रहेछ समय यस्तो सहयोग समूह
-# कस्तो कस् चर्चा सदस्य झन् महँगो सँग तँ संयोजक प्रशंसा सङ्गठन अङ्ग
-# परिवर्तन उक्त सुन्दर बन्द, ध बन्धन सम्बन्ध, न जर्नल संलग्न, र प्रयोग मात्र, व स्वर पूर्व ह चिन्ह.
-# सम्म  टिप्पणी निर्णय नम्बर
-# कण्ठ, ड in खण्ड, ण in पूर्ण and उत्तीर्ण, न in प्रश्न, व in विश्व, श in आदर्श and स्पर्श, ट in कष्ट, प in पुष्प, ष in वर्ष and हर्ष. च in पञ्च and ज in कुञ्ज  मञ्च  च
-# गुरुङ रङ
-# अनुभव
-# ''')
-#
+धेरै लामो बाटो हामी संग संगै हिंडी सक्यौं-२
+टाढा टाढा कता कता हामी दुवै पुगी सक्यौं
+तर अन्त्य यसको यहीं-२ भन्न अझै मनै भएन
+तिम्रो माया मार्नै सकिंन -२
+मर्न बरु गाह्रो हुन्न-२, तिम्रो माया मार्नै सकिंन -२''')
