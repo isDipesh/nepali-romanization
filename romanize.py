@@ -90,7 +90,10 @@ def replace_char(char):
         'ॠ': 'ri',
         'ॣ': 'l',
         'ॢ': 'l',
-        'ॐ': 'om'
+        'ॐ': 'om',
+        '१': '1','२': '2','३': '3','४': '4','५': '5', '६': '6',
+        '७': '7',
+        '८': '8', '९': '9', '०': '0'
     }
     return rep_dct[char] if char in rep_dct else char
 
