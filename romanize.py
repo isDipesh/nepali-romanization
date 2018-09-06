@@ -33,6 +33,7 @@ LOAN_WORDS = {
 }
 
 HARD_CODED = {
+    'काठमाडौँ': 'Kathmandu',
     'गीत': 'geet',
     'तर': 'tara',
     'मञ्च': 'manch',
@@ -47,18 +48,19 @@ HARD_CODED = {
     'छैन': 'chhaina',
     'दिन': 'din',
     'तल': 'tala',
+    'बाट': 'bata'
 }
 
 PREDEFINED = LOAN_WORDS.copy()
 PREDEFINED.update(HARD_CODED)
 
-KARS = ['ा', 'ि', 'ी', 'ु', 'ू', 'े', 'ै', 'ो', 'ौ', 'ं', '्', 'ृ', 'ः']
+KARS = ['ा', 'ि', 'ी', 'ु', 'ू', 'े', 'ै', 'ो', 'ौ', 'ं', 'ँ', '्', 'ृ', 'ः']
 CONSONANTS = ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब',
               'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह', 'क्ष', 'त्र', 'ज्ञ']
 VOWELS = ['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ए', 'ऐ', 'ओ', 'औ', ]
 BINDUS = ['ँ', 'ं', 'ः', ]
-# बिभाक्ति
-SUFFIXES = ['ले', 'बाट', 'लाई', 'द्वारा', 'देखि', 'को', 'का', 'की', 'मा', 'हरु', 'संग', 'पनि']
+# बिभाक्ति and other suffixes
+SUFFIXES = ['ले', 'बाट', 'लाई', 'द्वारा', 'देखि', 'को', 'का', 'की', 'मा', 'हरु', 'संग', ' सँग', 'पनि', 'कै', ' स्थित']
 
 
 def replace_char(char):
@@ -121,6 +123,7 @@ def romanize_word(word):
                     # Don't do anything for bindus at last like गरें => gare 
                     tr = ''
                 else:
+
                     ## Don't write a
                     tr = tr[1:]
             if char in CONSONANTS:
@@ -146,6 +149,7 @@ def romanize_word(word):
 
 def handle_matches(match):
     return romanize_word(match.group())
+
 
 # https://www.daniweb.com/programming/software-development/threads/399829/sentence-capitalization-in-python#post1713277
 def find_punctuations(str):
@@ -195,12 +199,3 @@ def romanize_devanagari(str):
     capitalized = capitalize(romanized_str)
     print(capitalized)
     return capitalized
-
-
-romanize_devanagari('''
-वेबको कुनैपनि ठाँउमा, तपाईंले छनोट गर्नु भएको भाषामा टाइप गर्न Google आगत उपकरणहरूले सजिलो बनाउँछ। थप जान्नुहोस्
-
-यसलाई प्रयास गर्न, तपाईंको भाषा र तलको आगत उपकरण रोज्नुहोस् र टाइप गर्न सुरु गर्नुहोस्।
-
-
-''')
