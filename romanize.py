@@ -153,6 +153,8 @@ def capitalize(str):
 
 def romanize_devanagari(str):
     pattern = r'[^\s,!\?\[\]\(\)।]+'
+    # Handle ज्ञ
+    str = str.replace('ज्ञ', 'ग्य')
     romanized_str = re.sub(pattern, handle_matches, str)
     # Replace purna birams with full-stops
     romanized_str = romanized_str.replace(r' ।', '.').replace(r'।', '.')
