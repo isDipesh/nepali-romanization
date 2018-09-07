@@ -135,11 +135,11 @@ def romanize_word(word):
                     tr = 'ng'
                 # remove trailing 'a' from consonant if last character but only if it isn't the only character
                 elif idx == length - 1 and len(word) > 1:
-                    if not pronouce_inherent(word, char, idx):
-                        if tr[-1:] == 'a':
-                            if char == 'व':
-                                tr = 'va'
-                            tr = tr[:-1]
+                    if not pronouce_inherent(word, char, idx) and tr[-1:] == 'a':
+                        # for  व at last, use va instead of wa
+                        if char == 'व':
+                            tr = 'va'
+                        tr = tr[:-1]
             new += tr
     suffix = ''.join(suffixes)
     if suffix:

@@ -26,6 +26,7 @@ print(romanize_text('''
 कसैलाई माया गर्ने एउटा भूल गरें मैले 
 यस्तो पनि हुँदो रहेछ...
 '''))
+# Lyrics Credit: Yadav Kharel
 
 print(romanize_word('मत्स्येन्द्रनाथ'))
 ``` 
